@@ -1,0 +1,20 @@
+teleop:
+  drive:
+    type: topic
+    message_type: deepracer_interfaces_pkg/msg/ServoCtrlMsg
+    topic_name: /webserver_pkg/manual_drive
+    deadman_buttons: [4]
+    axis_mappings:
+      - axis: 1
+        target: throttle
+        scale: 1.0
+      - axis: 2
+        target: angle
+        scale: 1.0
+  deadman:
+    type: service
+    service_name: /ctrl_pkg/enable_state
+    service_request:
+      isActive: true
+    buttons: [4]
+
