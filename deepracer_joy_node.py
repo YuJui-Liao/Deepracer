@@ -47,8 +47,8 @@ class DeepracerJoyNode(Node):
         if msg.buttons[self.config['teleop']['drive']['deadman_buttons'][0]] == 1:
             # Create a new ServoCtrlMsg based on joystick input
             servo_msg = ServoCtrlMsg()
-            servo_msg.angle = msg.axes[2] * 1.0  # Adjust axis index and scale as necessary
-            servo_msg.throttle = msg.axes[1] * -1.0  # Inverting the throttle as per your example
+            servo_msg.angle = msg.axes[3] * 1.0  # Adjust axis index and scale as necessary
+            servo_msg.throttle = msg.axes[1] * 0.5  # Inverting the throttle as per your example
 
             # Publish the message
             self.manual_drive_publisher.publish(servo_msg)
