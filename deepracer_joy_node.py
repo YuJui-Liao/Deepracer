@@ -2,9 +2,11 @@ import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import Joy
 from std_srvs.srv import SetBool
-from deepracer_interfaces_pkg.msg import ServoCtrlMsg  # Ensure this matches your message structure
+from deepracer_interfaces_pkg.msg import ServoCtrlMsg
 import yaml
 import os
+import csv
+from datetime import datetime
 from ament_index_python.packages import get_package_share_directory
 
 class DeepracerJoyNode(Node):
@@ -21,6 +23,12 @@ class DeepracerJoyNode(Node):
         with open(config_path, 'r') as file:
             self.config = yaml.safe_load(file)
 
+        # Setup CSV file for recording data
+        self.csv_file_path = os.path.expanduser('~/deepracer_ws/deepracer_joy/drive_data.csv')  # Simplified path
+        self.csv_file = open(self.csv_file_path, 'w', newline='')
+        self.csv_writer = csv.writer(self.csv_file)
+        self.csv_writer.writerow(['timestamp', 'angle', 'throttle'])  # Column headers
+
         self.get_logger().info(f"Loaded configuration: {self.config}")
 
         # Initialize the publisher
@@ -30,8 +38,7 @@ class DeepracerJoyNode(Node):
             10
         )
 
-        # Initialize the service client (assuming it's needed based on your YAML)
-        # Note: Ensure the service type and structure matches your actual service
+        # Initialize the service client
         self.enable_state_client = self.create_client(SetBool, '/ctrl_pkg/enable_state')
 
         # Subscribe to Joy messages
@@ -42,20 +49,22 @@ class DeepracerJoyNode(Node):
             10
         )
 
+
     def joy_callback(self, msg):
-        # Check if the deadman button is pressed; adjust the index as needed
         if msg.buttons[self.config['teleop']['drive']['deadman_buttons'][0]] == 1:
-            # Create a new ServoCtrlMsg based on joystick input
             servo_msg = ServoCtrlMsg()
-            servo_msg.angle = msg.axes[3] * 1.0  # Adjust axis index and scale as necessary
-            servo_msg.throttle = msg.axes[1] * 0.5  # Inverting the throttle as per your example
+            servo_msg.angle = msg.axes[3] * 1.0
+            servo_msg.throttle = msg.axes[1] * 0.5
 
             # Publish the message
             self.manual_drive_publisher.publish(servo_msg)
             self.get_logger().info(f"Publishing: {servo_msg}")
 
-            # Here you can also call the service if needed
-            # You'll need to implement logic to call the enable_state service as appropriate
+            # Write to CSV
+            self.csv_writer.writerow([datetime.now().strftime('%Y-%m-%d %H:%M:%S'), servo_msg.angle, servo_msg.throttle])
+
+    def __del__(self):
+        self.csv_file.close()
 
 def main(args=None):
     rclpy.init(args=args)
