@@ -1,6 +1,3 @@
-Here's your GitHub README.md file formatted with markdown:
-
-```markdown
 # AWS DeepRacer Joystick Readme
 
 ## Overview
