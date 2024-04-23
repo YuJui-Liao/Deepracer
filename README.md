@@ -59,4 +59,3 @@ The package structure is outlined as follows:
 ---
 
 For further information and updates, please refer to the official AWS DeepRacer documentation and ROS community resources.
-```
