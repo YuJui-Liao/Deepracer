@@ -60,5 +60,3 @@ The package structure is outlined as follows:
 
 For further information and updates, please refer to the official AWS DeepRacer documentation and ROS community resources.
 ```
-
-This markdown file is ready to be used in your GitHub repository. It's structured to provide a clear overview and easy navigation for users looking to integrate joystick controls into their AWS DeepRacer projects.
