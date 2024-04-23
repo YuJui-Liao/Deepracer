@@ -1,4 +1,4 @@
-# AWS DeepRacer Joystick Readme
+# AWS DeepRacer Joystick 
 
 ## Overview
 
