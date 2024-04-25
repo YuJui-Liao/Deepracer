@@ -52,7 +52,7 @@ The package structure is outlined as follows:
     - logitech_dual_action.yaml
   - **deepracer_joy/**
     - __init__.py
-    - deepracer_joy.py
+    - deepracer_joy_node.py
   - package.xml
   - setup.py
 
